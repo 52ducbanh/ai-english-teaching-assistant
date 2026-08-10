@@ -4,7 +4,7 @@ import { fetchAssistantApi, sendAssistantChatApi } from "../api/assistantApi";
 import { MOCK_DATABASE } from "../mocks/assistant.mock";
 import { ERROR_MESSAGES } from "../constants/messages";
 
-const USE_MOCK = import.meta.env.VITE_USE_MOCK !== "false";
+const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
 
 export async function getAssistantData(req: GetAssistantRequest): Promise<AssistantDataResponse> {
   if (USE_MOCK) {

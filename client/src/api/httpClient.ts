@@ -1,9 +1,8 @@
 import { ERROR_MESSAGES } from "../constants/messages";
 
-let API_BASE_URL = import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || "https://english-assistant-api.onrender.com";
-if (API_BASE_URL && !API_BASE_URL.startsWith("http")) {
-  API_BASE_URL = `https://${API_BASE_URL}`;
-}
+const API_BASE_URL = import.meta.env.PROD 
+  ? "https://english-assistant-api.onrender.com" 
+  : "http://localhost:3000";
 
 async function parseResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
