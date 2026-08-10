@@ -3,6 +3,9 @@ import { Subject } from "./modules/curriculum/entities/subject.entity";
 import { Grade } from "./modules/curriculum/entities/grade.entity";
 import { SubjectGrade } from "./modules/curriculum/entities/subject-grade.entity";
 import { Lesson } from "./modules/curriculum/entities/lesson.entity";
+import { Vocabulary } from "./modules/assistant/entities/vocabulary.entity";
+import { CommunicationPattern } from "./modules/assistant/entities/communication-pattern.entity";
+import { StudentQuestion } from "./modules/assistant/entities/student-question.entity";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -31,11 +34,14 @@ async function seed() {
     await AppDataSource.getRepository(Subject).save(englishSubject);
   }
 
-  // Clear existing lessons before reseeding
+  // Clear existing lessons and associated data before reseeding
   await AppDataSource.query("SET FOREIGN_KEY_CHECKS = 0;");
+  await AppDataSource.query("TRUNCATE TABLE vocabularies;");
+  await AppDataSource.query("TRUNCATE TABLE communication_patterns;");
+  await AppDataSource.query("TRUNCATE TABLE student_questions;");
   await AppDataSource.query("TRUNCATE TABLE lessons;");
   await AppDataSource.query("SET FOREIGN_KEY_CHECKS = 1;");
-  console.log("Cleared existing lessons.");
+  console.log("Cleared existing lessons and assistant data.");
 
   // Read KNTT curriculum data
   const curriculumDataPath = path.join(__dirname, "data", "kntt-english.json");
@@ -94,6 +100,27 @@ async function seed() {
             orderNumber: order,
           });
           await AppDataSource.getRepository(Lesson).save(lesson);
+
+          // Seed sample assistant data for each lesson
+          const vocabularies = [
+            AppDataSource.getRepository(Vocabulary).create({ lessonId: Number(lesson.id), word: "hello", phonetic: "/həˈləʊ/", meaningVi: "xin chào", orderNumber: 1 }),
+            AppDataSource.getRepository(Vocabulary).create({ lessonId: Number(lesson.id), word: "teacher", phonetic: "/ˈtiː.tʃər/", meaningVi: "giáo viên", orderNumber: 2 }),
+            AppDataSource.getRepository(Vocabulary).create({ lessonId: Number(lesson.id), word: "student", phonetic: "/ˈstjuː.dənt/", meaningVi: "học sinh", orderNumber: 3 }),
+            AppDataSource.getRepository(Vocabulary).create({ lessonId: Number(lesson.id), word: "school", phonetic: "/skuːl/", meaningVi: "trường học", orderNumber: 4 })
+          ];
+          await AppDataSource.getRepository(Vocabulary).save(vocabularies);
+
+          const patterns = [
+            AppDataSource.getRepository(CommunicationPattern).create({ lessonId: Number(lesson.id), englishPattern: "Hello, teacher.", meaningVi: "Em chào thầy/cô ạ.", orderNumber: 1 }),
+            AppDataSource.getRepository(CommunicationPattern).create({ lessonId: Number(lesson.id), englishPattern: "How are you?", meaningVi: "Bạn có khỏe không?", orderNumber: 2 })
+          ];
+          await AppDataSource.getRepository(CommunicationPattern).save(patterns);
+
+          const questions = [
+            AppDataSource.getRepository(StudentQuestion).create({ lessonId: Number(lesson.id), question: "What is this?", suggestedAnswer: "It is a book.", orderNumber: 1 }),
+            AppDataSource.getRepository(StudentQuestion).create({ lessonId: Number(lesson.id), question: "How do you spell your name?", suggestedAnswer: "It's L-I-N-H.", orderNumber: 2 })
+          ];
+          await AppDataSource.getRepository(StudentQuestion).save(questions);
         }
         order++;
       }
