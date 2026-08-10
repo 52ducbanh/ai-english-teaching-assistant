@@ -19,7 +19,7 @@ async function bootstrap() {
     credentials: true,
   });
 
-  await app.listen(environment.port);
+  await app.listen(environment.port, "0.0.0.0");
   console.log(`Backend server is running on: http://localhost:${environment.port}`);
 }
 bootstrap();
