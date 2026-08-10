@@ -32,7 +32,7 @@ async function seed() {
   }
 
   // Clear existing lessons before reseeding
-  await AppDataSource.getRepository(Lesson).delete({});
+  await AppDataSource.getRepository(Lesson).clear();
   console.log("Cleared existing lessons.");
 
   // Read KNTT curriculum data
