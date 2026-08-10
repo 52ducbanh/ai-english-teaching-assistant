@@ -3,6 +3,8 @@ import { Subject } from "./modules/curriculum/entities/subject.entity";
 import { Grade } from "./modules/curriculum/entities/grade.entity";
 import { SubjectGrade } from "./modules/curriculum/entities/subject-grade.entity";
 import { Lesson } from "./modules/curriculum/entities/lesson.entity";
+import * as fs from "fs";
+import * as path from "path";
 
 import { environment } from "./config/environment.config";
 
@@ -28,6 +30,14 @@ async function seed() {
     englishSubject = AppDataSource.getRepository(Subject).create({ name: "Tiếng Anh", code: "ENG" });
     await AppDataSource.getRepository(Subject).save(englishSubject);
   }
+
+  // Clear existing lessons before reseeding
+  await AppDataSource.getRepository(Lesson).delete({});
+  console.log("Cleared existing lessons.");
+
+  // Read KNTT curriculum data
+  const curriculumDataPath = path.join(__dirname, "data", "kntt-english.json");
+  const curriculumData = JSON.parse(fs.readFileSync(curriculumDataPath, "utf-8"));
 
   const gradesData = [
     { number: 3, name: "Lớp 3" },
@@ -68,17 +78,12 @@ async function seed() {
       console.log(`Created SubjectGrade mapping for ${englishSubject.name} - ${grade.name}`);
     }
 
-    // Insert Lessons for Grade 3
-    if (gData.number === 3) {
-      const grade3Lessons = [
-        "Unit 1: Hello", "Unit 2: Our names", "Unit 3: Our friends", "Unit 4: Our bodies", "Unit 5: My hobbies",
-        "Unit 6: Our school", "Unit 7: Classroom instructions", "Unit 8: My school things", "Unit 9: Colours", "Unit 10: Break time activities",
-        "Unit 11: My family", "Unit 12: Jobs", "Unit 13: My house", "Unit 14: My bedroom", "Unit 15: At the dining table",
-        "Unit 16: My pets", "Unit 17: Our toys", "Unit 18: Playing and doing", "Unit 19: Outdoor activities", "Unit 20: At the zoo"
-      ];
-      
+    // Insert Lessons for this grade
+    const unitTitles = curriculumData[String(gData.number)];
+    if (unitTitles && unitTitles.length > 0) {
       let order = 1;
-      for (const lessonName of grade3Lessons) {
+      for (const lessonTitle of unitTitles) {
+        const lessonName = `Unit ${order}: ${lessonTitle}`;
         let lesson = await AppDataSource.getRepository(Lesson).findOneBy({ name: lessonName, subjectGradeId: Number(subjectGrade.id) });
         if (!lesson) {
           lesson = AppDataSource.getRepository(Lesson).create({
@@ -90,32 +95,7 @@ async function seed() {
         }
         order++;
       }
-      console.log(`Seeded ${grade3Lessons.length} lessons for Grade 3`);
-    }
-
-    // Insert Lessons for Grade 4
-    if (gData.number === 4) {
-      const grade4Lessons = [
-        "Unit 1: My friends", "Unit 2: Time and daily routines", "Unit 3: My week", "Unit 4: My birthday party", "Unit 5: Things we can do",
-        "Unit 6: Our school facilities", "Unit 7: Our timetables", "Unit 8: My favourite subjects", "Unit 9: Our sports day", "Unit 10: Our summer holidays",
-        "Unit 11: My home", "Unit 12: Jobs", "Unit 13: Appearance", "Unit 14: Daily activities", "Unit 15: My family's weekends",
-        "Unit 16: Weather", "Unit 17: In the city", "Unit 18: At the shopping centre", "Unit 19: The animal world", "Unit 20: At summer camp"
-      ];
-
-      let order = 1;
-      for (const lessonName of grade4Lessons) {
-        let lesson = await AppDataSource.getRepository(Lesson).findOneBy({ name: lessonName, subjectGradeId: Number(subjectGrade.id) });
-        if (!lesson) {
-          lesson = AppDataSource.getRepository(Lesson).create({
-            subjectGradeId: Number(subjectGrade.id),
-            name: lessonName,
-            orderNumber: order,
-          });
-          await AppDataSource.getRepository(Lesson).save(lesson);
-        }
-        order++;
-      }
-      console.log(`Seeded ${grade4Lessons.length} lessons for Grade 4`);
+      console.log(`Seeded ${unitTitles.length} lessons for Grade ${gData.number}`);
     }
   }
 
