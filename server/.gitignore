@@ -1,0 +1,9 @@
+# Local secrets and machine-specific configuration
+.env
+.env.*
+!.env.example
+
+# Generated files
+node_modules/
+dist/
+*.tsbuildinfo

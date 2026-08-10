@@ -1,0 +1,108 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  animation: fadeInUp 0.4s ease;
+  flex: 1;
+  height: 100%;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-3);
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.badge {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-accent-vocab), #6e94f8);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-xs);
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.sectionTitleText {
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.searchRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-1);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tableHead th {
+  padding: var(--spacing-2) var(--spacing-3);
+  text-align: left;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg);
+}
+
+.tableHead th:first-child {
+  border-radius: var(--radius-sm) 0 0 0;
+}
+
+.tableHead th:last-child {
+  border-radius: 0 var(--radius-sm) 0 0;
+}
+
+.tableRow {
+  transition: background var(--transition-fast);
+}
+
+.tableRow:hover {
+  background: var(--color-primary-bg);
+}
+
+.tableRow td {
+  padding: var(--spacing-3);
+  border-bottom: 1px solid var(--color-border-light);
+  font-size: var(--font-size-sm);
+  vertical-align: middle;
+}
+
+.wordCell {
+  font-weight: 600;
+  color: var(--color-accent-vocab);
+}
+
+.phoneticCell {
+  color: var(--color-text-secondary);
+  font-style: italic;
+  font-size: var(--font-size-xs);
+}
+
+.meaningCell {
+  color: var(--color-text-primary);
+}
+
+.emptyState {
+  text-align: center;
+  padding: var(--spacing-8) 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}

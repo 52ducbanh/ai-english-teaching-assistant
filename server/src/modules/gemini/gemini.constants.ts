@@ -1,0 +1,2 @@
+export const MAX_GEMINI_TURN_CONTENT_LENGTH = 2_000;
+export const MAX_GEMINI_HISTORY_TURNS = 10;

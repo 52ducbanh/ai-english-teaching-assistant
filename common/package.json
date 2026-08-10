@@ -1,0 +1,8 @@
+{
+  "name": "@english-assistant/common",
+  "version": "1.0.0",
+  "description": "Shared types between client and server",
+  "main": "types/index.ts",
+  "license": "UNLICENSED",
+  "private": true
+}
