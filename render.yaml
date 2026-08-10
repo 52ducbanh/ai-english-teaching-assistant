@@ -3,6 +3,7 @@ services:
   - type: web
     name: english-assistant-api
     env: node
+    plan: free
     rootDir: server
     buildCommand: npm install && npm run build
     startCommand: npm run start:prod
@@ -32,6 +33,7 @@ services:
   - type: web
     name: english-assistant-client
     env: static
+    plan: free
     rootDir: client
     buildCommand: npm install && npm run build
     staticPublishPath: dist
