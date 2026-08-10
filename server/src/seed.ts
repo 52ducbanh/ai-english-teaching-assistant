@@ -32,7 +32,9 @@ async function seed() {
   }
 
   // Clear existing lessons before reseeding
-  await AppDataSource.getRepository(Lesson).clear();
+  await AppDataSource.query("SET FOREIGN_KEY_CHECKS = 0;");
+  await AppDataSource.query("TRUNCATE TABLE lessons;");
+  await AppDataSource.query("SET FOREIGN_KEY_CHECKS = 1;");
   console.log("Cleared existing lessons.");
 
   // Read KNTT curriculum data
