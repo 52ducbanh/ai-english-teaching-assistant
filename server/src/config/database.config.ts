@@ -11,4 +11,5 @@ export const databaseConfig = {
   entities: [__dirname + "/../**/*.entity{.ts,.js}"],
   synchronize: environment.database.synchronize,
   logging: environment.database.logging,
+  ssl: environment.database.ssl ? { rejectUnauthorized: false } : undefined,
 } satisfies TypeOrmModuleOptions;

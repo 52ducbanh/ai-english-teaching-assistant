@@ -94,6 +94,7 @@ export const environment = {
     name: requireEnvironmentValue("DB_NAME"),
     synchronize,
     logging: process.env.DB_LOGGING === "true",
+    ssl: process.env.DB_SSL === "true",
   },
   gemini: {
     // The API key is intentionally optional at boot so the non-AI API can run
