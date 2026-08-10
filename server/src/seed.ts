@@ -25,7 +25,7 @@ async function seed() {
   // Get or Create "Tiếng Anh" Subject
   let englishSubject = await AppDataSource.getRepository(Subject).findOneBy({ name: "Tiếng Anh" });
   if (!englishSubject) {
-    englishSubject = AppDataSource.getRepository(Subject).create({ name: "Tiếng Anh" });
+    englishSubject = AppDataSource.getRepository(Subject).create({ name: "Tiếng Anh", code: "ENG" });
     await AppDataSource.getRepository(Subject).save(englishSubject);
   }
 
