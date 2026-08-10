@@ -4,13 +4,16 @@ import { Grade } from "./modules/curriculum/entities/grade.entity";
 import { SubjectGrade } from "./modules/curriculum/entities/subject-grade.entity";
 import { Lesson } from "./modules/curriculum/entities/lesson.entity";
 
+import { environment } from "./config/environment.config";
+
 const AppDataSource = new DataSource({
   type: "mysql",
-  host: "localhost",
-  port: 3306,
-  username: "root",
-  password: "123456",
-  database: "english_assistant_db",
+  host: environment.database.host,
+  port: environment.database.port,
+  username: environment.database.username,
+  password: environment.database.password,
+  database: environment.database.name,
+  ssl: environment.database.ssl ? { rejectUnauthorized: false } : false,
   entities: [__dirname + "/**/*.entity{.ts,.js}"],
   synchronize: false,
 });
